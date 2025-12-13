@@ -1,49 +1,298 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buscador de cartas</title>
+    <title>Buscador de Cartas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            font-size: 3em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .search-box {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        #carta {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        #carta:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+        }
+
+        .card-display {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: none;
+        }
+
+        .card-display.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        #nombre {
+            font-size: 2.5em;
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .card-image-container {
+            text-align: center;
+            margin: 20px 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        #imagen {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .card-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .info-item {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-item.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: #667eea;
+            text-transform: uppercase;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            color: #333;
+            font-size: 1.1em;
+        }
+
+        #descripcion {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #f5576c;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .card-info {
+                grid-template-columns: 1fr;
+            }
+
+            .input-group {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>buscador de cartas</h1>
-    <input type="text" id="carta">
-    <input type="button" value="buscar" onclick="buscar()">
-    <input type="button" value="ver todas las cartas" width="30" onclick="redireccionar()">
+    <div class="container">
+        <h1>🎴 Buscador de Cartas</h1>
+        
+        <div class="search-box">
+            <div class="input-group">
+                <input type="text" id="carta" placeholder="Escribe el nombre de la carta...">
+                <button class="btn btn-primary" onclick="buscar()">🔍 Buscar</button>
+            </div>
+            <button class="btn btn-secondary" onclick="redireccionar()">📚 Ver Todas las Cartas</button>
+        </div>
+
+        <div class="card-display" id="cardDisplay">
+            <h2 id="nombre"></h2>
+            
+            <div class="card-image-container">
+                <img src="" alt="" id="imagen">
+            </div>
+
+            <div id="descripcion"></div>
+
+            <div class="card-info">
+                <div class="info-item">
+                    <div class="info-label">⚔️ Ataque</div>
+                    <div class="info-value" id="atq"></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">❤️ HP</div>
+                    <div class="info-value" id="hp"></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🏃 Tipo de Movimiento</div>
+                    <div class="info-value" id="tipo-movimiento"></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">⏱️ Cooldown</div>
+                    <div class="info-value" id="cooldown"></div>
+                </div>
+                <div class="info-item full-width">
+                    <div class="info-label">✨ Habilidad Activa</div>
+                    <div class="info-value" id="activa"></div>
+                </div>
+                <div class="info-item full-width">
+                    <div class="info-label">🛡️ Habilidad Pasiva</div>
+                    <div class="info-value" id="pasiva"></div>
+                </div>
+            </div>
+        </div>
+    </div>
     
-    <h2 id="nombre"></h2>
-    <img src="" alt="" id="imagen" width="600">
-    <p id="descripcion"></p>
-    <p id="atq"></p>
-    <p id="hp"></p>
-    <p id="activa"></p>
-    <p id="pasiva"></p>
-    <p id="cooldown"></p>
-    <p id="tipo-movimiento"></p>
-    <p></p>
     <script type="module">
-        let apikey=await fetch("/apikey").then(
-            function(r){return r.json()}
-        ).then(function(apikey){return apikey.apikey});
-      window.buscar=  async function buscar(){
-            let buscador=document.getElementById("carta").value
-            let res= await fetch(`https://api-de-cartas.onrender.com/${apikey}/${buscador}`)
-            let carta=await res.json()
-        let  infocarta= carta[0]
-        console.log(infocarta)
-            document.getElementById("nombre").textContent=infocarta.nombre;
-            document.getElementById("imagen").src=infocarta.imagen
-            document.getElementById("descripcion").textContent="descripción:"+infocarta.descripcion
-            document.getElementById("atq").textContent="atq:"+infocarta.atq
-            document.getElementById("hp").textContent="hp:"+infocarta.hp
-            document.getElementById("tipo-movimiento").textContent="tipo de movimiento:"+infocarta.tipo_de_movimiento
-          document.getElementById("pasiva").textContent="pasiva:"+infocarta.pasiva
-          document.getElementById("activa").textContent="activa:"+infocarta.activa
-          document.getElementById("cooldown").textContent="cooldown:"+infocarta.cooldown
+        let apikey = await fetch("/apikey").then(
+            function(r) { return r.json() }
+        ).then(function(apikey) { return apikey.apikey });
+
+        window.buscar = async function buscar() {
+            let buscador = document.getElementById("carta").value;
+            if (!buscador.trim()) {
+                alert("Por favor, ingresa el nombre de una carta");
+                return;
+            }
+
+            try {
+                let res = await fetch(`https://api-de-cartas.onrender.com/${apikey}/${buscador}`);
+                let carta = await res.json();
+                let infocarta = carta[0];
+                
+                console.log(infocarta);
+                
+                document.getElementById("nombre").textContent = infocarta.nombre;
+                document.getElementById("imagen").src = infocarta.imagen;
+                document.getElementById("descripcion").textContent = infocarta.descripcion;
+                document.getElementById("atq").textContent = infocarta.atq;
+                document.getElementById("hp").textContent = infocarta.hp;
+                document.getElementById("tipo-movimiento").textContent = infocarta.tipo_de_movimiento;
+                document.getElementById("pasiva").textContent = infocarta.pasiva;
+                document.getElementById("activa").textContent = infocarta.activa;
+                document.getElementById("cooldown").textContent = infocarta.cooldown;
+                
+                document.getElementById("cardDisplay").classList.add("active");
+            } catch (error) {
+                alert("No se encontró la carta. Intenta con otro nombre.");
+            }
         }
-     window.redireccionar=function redireccionar(){
-            window.location.href="/wiki"
+
+        window.redireccionar = function redireccionar() {
+            window.location.href = "/wiki";
         }
+
+        // Permitir buscar con Enter
+        document.getElementById("carta").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                buscar();
+            }
+        });
     </script>
 </body>
 </html>
