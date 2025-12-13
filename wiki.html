@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki</title>
+</head>
+<body>
+    <h1>Wiki</h1>
+    <script type="module">
+        let i=0
+                let apikey=await fetch("/apikey").then(
+            function(r){return r.json()}
+        ).then(function(apikey){return apikey.apikey});
+
+
+            let res= await fetch(`https://api-de-cartas.onrender.com/${apikey}`)
+             let carta=await res.json()
+
+             function crearDOM(i){
+          document.body.appendChild(document.createElement('p')).id=`nombre${i}`
+          document.body.appendChild(document.createElement('img')).id=`imagen${i}`
+                document.getElementById(`imagen${i}`).width="600"
+          document.body.appendChild(document.createElement('p')).id=`descripcion${i}`
+              document.body.appendChild(document.createElement('p')).id=`atq${i}`
+            document.body.appendChild(document.createElement('p')).id=`hp${i}`
+       document.body.appendChild(document.createElement("p")).id=`tipo-movimiento${i}`
+       document.body.appendChild(document.createElement("p")).id=`pasiva${i}`
+       document.body.appendChild(document.createElement("p")).id=`activa${i}`
+      document.body.appendChild(document.createElement("p")).id=`cooldown${i}`
+        }
+
+
+        function ponerDOM(i,infocarta){
+              document.getElementById(`nombre${i}`).textContent=infocarta.nombre;
+            document.getElementById(`imagen${i}`).src=infocarta.imagen
+            document.getElementById(`descripcion${i}`).textContent="descripción:"+infocarta.descripcion
+            document.getElementById(`atq${i}`).textContent="atq:"+infocarta.atq
+            document.getElementById(`hp${i}`).textContent="hp:"+infocarta.hp
+            document.getElementById(`tipo-movimiento${i}`).textContent="tipo de movimiento:"+infocarta.tipo_de_movimiento
+          document.getElementById(`pasiva${i}`).textContent="pasiva:"+infocarta.pasiva
+          document.getElementById(`activa${i}`).textContent="activa:"+infocarta.activa
+          document.getElementById(`cooldown${i}`).textContent="cooldown:"+infocarta.cooldown
+        }
+
+
+     for(let infocarta of carta){crearDOM(i);ponerDOM(i,infocarta)
+        ++i}
+    </script>
+</body>
+</html>

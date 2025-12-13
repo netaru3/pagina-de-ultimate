@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscador de cartas</title>
+</head>
+<body>
+    <h1>buscador de cartas</h1>
+    <input type="text" id="carta">
+    <input type="button" value="buscar" onclick="buscar()">
+    <input type="button" value="ver todas las cartas" width="30" onclick="redireccionar()">
+    
+    <h2 id="nombre"></h2>
+    <img src="" alt="" id="imagen" width="600">
+    <p id="descripcion"></p>
+    <p id="atq"></p>
+    <p id="hp"></p>
+    <p id="activa"></p>
+    <p id="pasiva"></p>
+    <p id="cooldown"></p>
+    <p id="tipo-movimiento"></p>
+    <p></p>
+    <script type="module">
+        let apikey=await fetch("/apikey").then(
+            function(r){return r.json()}
+        ).then(function(apikey){return apikey.apikey});
+      window.buscar=  async function buscar(){
+            let buscador=document.getElementById("carta").value
+            let res= await fetch(`https://api-de-cartas.onrender.com/${apikey}/${buscador}`)
+            let carta=await res.json()
+        let  infocarta= carta[0]
+        console.log(infocarta)
+            document.getElementById("nombre").textContent=infocarta.nombre;
+            document.getElementById("imagen").src=infocarta.imagen
+            document.getElementById("descripcion").textContent="descripción:"+infocarta.descripcion
+            document.getElementById("atq").textContent="atq:"+infocarta.atq
+            document.getElementById("hp").textContent="hp:"+infocarta.hp
+            document.getElementById("tipo-movimiento").textContent="tipo de movimiento:"+infocarta.tipo_de_movimiento
+          document.getElementById("pasiva").textContent="pasiva:"+infocarta.pasiva
+          document.getElementById("activa").textContent="activa:"+infocarta.activa
+          document.getElementById("cooldown").textContent="cooldown:"+infocarta.cooldown
+        }
+     window.redireccionar=function redireccionar(){
+            window.location.href="/wiki"
+        }
+    </script>
+</body>
+</html>
