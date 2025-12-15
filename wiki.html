@@ -238,14 +238,16 @@
             const cardDiv = document.createElement('div');
             cardDiv.className = 'card';
             cardDiv.style.animationDelay = `${index * 0.1}s`;
+            fetch(`/${infocarta.nombre}`)
             
             cardDiv.innerHTML = `
                 <div class="card-header">
-                    <div class="card-name">${infocarta.nombre}</div>
+                    <div class="card-name"><a href='/${infocarta.nombre}'>${infocarta.nombre}</a></div>
                 </div>
                 
                 <div class="card-image-container">
-                    <img src="${infocarta.imagen}" alt="${infocarta.nombre}" class="card-image">
+                    <img src="${infocarta.imagen}" alt="${infocarta.nombre}" class="card-image"
+                    >
                 </div>
                 
                 <div class="card-body">
